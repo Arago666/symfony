@@ -2,11 +2,7 @@
 
 namespace App\Entity;
 
-use App\Entity\Aggregate\MovieSession;
-use App\Entity\ValueObject\NameClient;
 use App\Repository\ClientRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -16,26 +12,25 @@ class Client
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type = "string", length = 100)
+     * @ORM\Column(type="string", length=100)
      */
     private string $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=NameClient::class)
+     * @ORM\Column(type="string", length=100)
      */
-    private NameClient $name;
+    private string $firstName;
 
     /**
      * @ORM\Column(type="string", length=30)
      */
     private string $phone;
 
-    public function __construct(string $id, NameClient $name, string $phone)
+    public function __construct(string $id, string $firstName, string $phone)
     {
         $this->id = $id;
-        $this->name = $name;
+        $this->firstName = $firstName;
         $this->phone = $phone;
-        $this->movieSessions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -43,14 +38,14 @@ class Client
         return $this->id;
     }
 
-    public function getName(): ?NameClient
+    public function getFirstName(): ?string
     {
-        return $this->name;
+        return $this->firstName;
     }
 
-    public function setName(?NameClient $name): self
+    public function setFirstName(string $firstName): self
     {
-        $this->name = $name;
+        $this->firstName = $firstName;
 
         return $this;
     }

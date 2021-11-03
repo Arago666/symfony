@@ -7,7 +7,7 @@ use App\Entity\Movie;
 use App\Repository\Aggregate\MovieSessionRepository;
 use Doctrine\ORM\Mapping as ORM;
 use DateTimeInterface;
-use http\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 
 /**
  * @ORM\Entity(repositoryClass=MovieSessionRepository::class)
@@ -38,9 +38,9 @@ class MovieSession
 
     /**
      * @ORM\ManyToOne(targetEntity=Client::class)
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
-    private array $tickets;
+    private $tickets;
 
     public function __construct(string $id, Movie $movie, DateTimeInterface $startTime, int $quantityTickets)
     {
@@ -85,13 +85,6 @@ class MovieSession
         return $this->quantityTickets;
     }
 
-    public function setQuantityTickets(int $quantityTickets): self
-    {
-        $this->quantityTickets = $quantityTickets;
-
-        return $this;
-    }
-
     /**
      * @param Client $client
      * @throws \InvalidArgumentException
@@ -110,9 +103,14 @@ class MovieSession
         return $this->getQuantityFreeTickets() > 0;
     }
 
-    public function getQuantityFreeTickets(): int
+    public function reduceFreeTicket(): bool
     {
-        return $this->quantityTickets - count($this->tickets);
+        return $this->quantityTickets = $this->quantityTickets - 1;
+    }
+
+    public function getQuantityFreeTickets(): ?int
+    {
+        return $this->quantityTickets;
     }
 
     public function getEndTime(): DateTimeInterface

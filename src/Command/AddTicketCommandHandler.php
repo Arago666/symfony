@@ -28,13 +28,9 @@ class AddTicketCommandHandler
             throw new BadRequestHttpException($error);
         }
 
-        $entity = new Client();
+        $client = new Client($command->id, $command->firstName, $command->phone);
 
-        $entity->setId($command->id)
-            ->setName($command->name)
-            ->setPhone($command->phone);
-
-        $this->doctrine->getManager()->persist($entity);
+        $this->doctrine->getManager()->persist($client);
         $this->doctrine->getManager()->flush();
     }
 

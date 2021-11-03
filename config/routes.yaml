@@ -1,3 +1,15 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+booking:
+  path: /booking
+  # the controller value has the format 'controller_class::method_name'
+  controller: App\Controller\BookingController::index
+
+booking_create:
+  path: /booking_create
+  # the controller value has the format 'controller_class::method_name'
+  controller: App\Controller\BookingController::create
+
+

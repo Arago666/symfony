@@ -13,10 +13,9 @@ class Movie
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type = "string", length = 100)
      */
-    private int $id;
+    private string $id;
 
     /**
      * @ORM\Column(type="string", length=255)

@@ -22,12 +22,6 @@ class MovieSessionService
          */
         $movieSessionRepository = $this->entityManager->getRepository(MovieSession::class);
 
-
         return $movieSessionRepository->getMovieSession($page, $perPage);
-    }
-
-    public function getOne(string $movieSessionId): MovieSession
-    {
-       // return parent::find($movieSessionId);
     }
 }

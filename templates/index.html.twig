@@ -1,1 +1,30 @@
-{{ form(form) }}
+<h1>
+    {{ title }}
+</h1>
+
+{% for movieSession_item in movieSession %}
+    <form method="get">
+        Фильм: {{  movieSession_item.movie.name }} <br>
+
+        Дата начала фильма: {{ movieSession_item.startTime|date("F j, g:i a") }} <br>
+
+        Длительность фильма: {{  movieSession_item.movie.durationInMinutes }} <br>
+
+        Количество свободных билетов: {{  movieSession_item.quantityTickets }} <br>
+
+        Ваше имя: <textarea name="name"></textarea><br>
+
+        Ваш телефон: <textarea name="phone"></textarea><br>
+
+        <a href="{{ path('booking_create',
+            {
+                'movieSessionId': movieSession_item.id,
+                "name": app.request.query.get("name"),
+                "phone": app.request.query.get("phone")
+            }) }}">
+            Купить билет
+        </a>  <input type="submit" value="Go!" />
+    </form>
+    <br>
+    <br>
+{% endfor %}

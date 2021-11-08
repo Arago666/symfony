@@ -2,10 +2,9 @@
 
 namespace App\Controller;
 
-use App\Form\MovieSessionType;
 use App\Repository\Aggregate\MovieSessionRepository;
 use App\Service\MovieSessionService;
-use App\Entity\Client;
+use App\Entity\Ticket;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Ramsey\Uuid\Uuid;
@@ -14,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 class BookingController extends AbstractController
 {
     private MovieSessionRepository $movieSessionRepository;
-    private MovieSessionService  $movieSessionService;
+    private MovieSessionService $movieSessionService;
 
     public function __construct(MovieSessionRepository $movieSessionRepository, MovieSessionService $movieSessionService)
     {
@@ -24,18 +23,19 @@ class BookingController extends AbstractController
 
     public function create(Request $request): Response
     {
-        $client = new Client(
+        $movieSession = $this->movieSessionRepository->find($request->query->get("movieSessionId"));
+        $ticket = new Ticket(
             Uuid::uuid4(),
             $request->query->get("name"),
-            $request->query->get("phone")
+            $request->query->get("phone"),
+            $movieSession
         );
         $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($client);
+        $movieSession->addTickets();
+        $entityManager->persist($movieSession);
         $entityManager->flush();
-
-        $movieSession = $this->movieSessionRepository->find($request->query->get("movieSessionId"));
-        $movieSession->addTickets($client);
-        $movieSession->reduceFreeTicket();
+        $entityManager->persist($ticket);
+        $entityManager->flush();
 
         return $this->index();
     }

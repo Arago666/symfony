@@ -18,4 +18,11 @@ class MovieRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Movie::class);
     }
+
+    public function save(Movie $movie): void
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($movie);
+        $entityManager->flush();
+    }
 }

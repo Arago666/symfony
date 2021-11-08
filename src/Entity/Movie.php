@@ -44,22 +44,8 @@ class Movie
         return $this->name;
     }
 
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
     public function getDurationInMinutes(): ?int
     {
         return $this->durationInMinutes;
-    }
-
-    public function setDurationInMinutes(int $durationInMinutes): self
-    {
-        $this->durationInMinutes = $durationInMinutes;
-
-        return $this;
     }
 }

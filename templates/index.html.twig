@@ -15,7 +15,7 @@
         Ваше имя: <textarea name="name"></textarea><br>
 
         Ваш телефон: <textarea name="phone"></textarea><br>
-
+        <input type="submit" value="Сформировать" />
         <a href="{{ path('booking_create',
             {
                 'movieSessionId': movieSession_item.id,
@@ -23,7 +23,7 @@
                 "phone": app.request.query.get("phone")
             }) }}">
             Купить билет
-        </a>  <input type="submit" value="Go!" />
+        </a>
     </form>
     <br>
     <br>

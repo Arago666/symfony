@@ -2,7 +2,7 @@
 
 namespace App\Entity\Aggregate;
 
-use App\Entity\Client;
+use App\Entity\Ticket;
 use App\Entity\Movie;
 use App\Repository\Aggregate\MovieSessionRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -36,19 +36,12 @@ class MovieSession
      */
     private int $quantityTickets;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Client::class)
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $tickets;
-
     public function __construct(string $id, Movie $movie, DateTimeInterface $startTime, int $quantityTickets)
     {
         $this->id = $id;
         $this->movie = $movie;
         $this->startTime = $startTime;
         $this->quantityTickets = $quantityTickets;
-        $this->tickets = [];
     }
 
     public function getId(): ?int
@@ -61,23 +54,9 @@ class MovieSession
         return $this->movie;
     }
 
-    public function setMovie(?Movie $movie): self
-    {
-        $this->movie = $movie;
-
-        return $this;
-    }
-
     public function getStartTime(): ?\DateTimeInterface
     {
         return $this->startTime;
-    }
-
-    public function setStartTime(\DateTimeInterface $startTime): self
-    {
-        $this->startTime = $startTime;
-
-        return $this;
     }
 
     public function getQuantityTickets(): ?int
@@ -86,16 +65,15 @@ class MovieSession
     }
 
     /**
-     * @param Client $client
      * @throws \InvalidArgumentException
      */
-    public function addTickets(Client $client): void
+    public function addTickets(): void
     {
         if (!$this->isFreeTicket()) {
             throw new InvalidArgumentException("Отсутсвуют свободные билеты");
         }
 
-        $this->tickets[] = $client;
+        $this->reduceFreeTicket();
     }
 
     public function isFreeTicket(): bool

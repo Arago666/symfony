@@ -15,10 +15,9 @@ class AddTicketHandler implements MessageHandlerInterface
         $this->movieSessionRepository = $movieSessionRepository;
     }
 
-    public function __invoke(AddTicket $movieTicket)
+    public function __invoke(AddTicket $movieTicket): void
     {
         $movieSession = $this->movieSessionRepository->find($movieTicket->getMovieId());
         $movieSession->addTickets($movieTicket->getClient());
-        $movieSession->reduceFreeTicket();
     }
 }

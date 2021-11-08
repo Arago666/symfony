@@ -2,17 +2,17 @@
 
 namespace App\Message;
 
-use App\Entity\Client;
+use App\Entity\Ticket;
 
 class AddTicket
 {
     private string $movieId;
-    private Client $client;
+    private Ticket $ticket;
 
-    public function __construct(string $movieId, Client $client)
+    public function __construct(string $movieId, Ticket $ticket)
     {
         $this->movieId = $movieId;
-        $this->client = $client;
+        $this->ticket = $ticket;
     }
 
     public function getMovieId(): string
@@ -20,9 +20,8 @@ class AddTicket
         return $this->movieId;
     }
 
-    public function getClient(): Client
+    public function getTicket(): Ticket
     {
-        return $this->client;
+        return $this->ticket;
     }
-
 }

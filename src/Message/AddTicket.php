@@ -2,26 +2,41 @@
 
 namespace App\Message;
 
+use App\Entity\Aggregate\MovieSession;
 use App\Entity\Ticket;
 
-class AddTicket
+class AddTicket extends Ticket
 {
-    private string $movieId;
-    private Ticket $ticket;
+    public string $id;
+    public string $firstName;
+    public string $phone;
+    public MovieSession $movieSession;
 
-    public function __construct(string $movieId, Ticket $ticket)
+    public function __construct(string $id, string $firstName, string $phone, MovieSession $movieSession)
     {
-        $this->movieId = $movieId;
-        $this->ticket = $ticket;
+        $this->id = $id;
+        $this->firstName = $firstName;
+        $this->phone = $phone;
+        $this->movieSession = $movieSession;
     }
 
-    public function getMovieId(): string
+    public function getId(): string
     {
-        return $this->movieId;
+        return $this->id;
     }
 
-    public function getTicket(): Ticket
+    public function getFirstName(): string
     {
-        return $this->ticket;
+        return $this->firstName;
+    }
+
+    public function getPhone(): string
+    {
+        return $this->phone;
+    }
+
+    public function getMovieSession(): MovieSession
+    {
+        return $this->movieSession;
     }
 }

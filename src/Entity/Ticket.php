@@ -40,4 +40,9 @@ class Ticket
         $this->phone = $phone;
         $this->movieSession = $movieSession;
     }
+
+    public function getMovieSession(): MovieSession
+    {
+        return $this->movieSession;
+    }
 }

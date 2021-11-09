@@ -2,7 +2,6 @@
 
 namespace App\Entity\Aggregate;
 
-use App\Entity\Ticket;
 use App\Entity\Movie;
 use App\Repository\Aggregate\MovieSessionRepository;
 use Doctrine\ORM\Mapping as ORM;

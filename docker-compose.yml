@@ -3,38 +3,38 @@ version: '3.0'
 services:
   nginx:
     build:
-      context: ./nginx
+      context: ./docker/nginx
     volumes:
-      - ./app:/symfony
+      - ./:/var
     container_name: nginx
     restart: always
     ports:
       - "8081:80"
 
-  php-fpm-8:
+  php-fpm:
     build:
-      context: ./php-fpm
+      context: ./docker/php-fpm
     volumes:
-      - ./app:/symfony
-    container_name: php-fpm-8
+      - ./:/var
+    container_name: php-fpm
     depends_on:
       - mysql
 
   php-cli:
     build:
-      context: ./php-cli
+      context: ./docker/php-cli
     volumes:
-      - ./app:/symfony
+      - ./:/var
     command: sleep 10000
     container_name: php-cli
 
   mysql:
     image: mysql:5.7
     build:
-      context: ./nginx
+      context: ./docker/mysql
     command: --default-authentication-plugin=mysql_native_password
     volumes:
-      - ./app:/symfony
+      - ./:/var
     container_name: mysql
     restart: always
     environment:
@@ -42,6 +42,3 @@ services:
       - "MYSQL_DATABASE=db"
       - "MYSQL_USER=root"
       - "MYSQL_PASSWORD=root"
-
-volumes:
-  mysql:

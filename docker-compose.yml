@@ -5,40 +5,55 @@ services:
     build:
       context: ./docker/nginx
     volumes:
-      - ./:/var
-    container_name: nginx
-    restart: always
+      - ./public:/var/www/public
+      - ./docker/nginx/sites:/etc/nginx/conf.d
     ports:
-      - "8081:80"
+      - 80:80
+    depends_on:
+      - php-fpm
+    networks:
+      - internal
 
   php-fpm:
     build:
       context: ./docker/php-fpm
     volumes:
-      - ./:/var
-    container_name: php-fpm
+      - ./:/var/www/public
+    ports:
+      - 9000
     depends_on:
       - mysql
-
-  php-cli:
-    build:
-      context: ./docker/php-cli
-    volumes:
-      - ./:/var
-    command: sleep 10000
-    container_name: php-cli
+    networks:
+      - internal
 
   mysql:
     image: mysql:5.7
     build:
       context: ./docker/mysql
     command: --default-authentication-plugin=mysql_native_password
-    volumes:
-      - ./:/var
-    container_name: mysql
-    restart: always
     environment:
-      - "MYSQL_ROOT_PASSWORD=root"
-      - "MYSQL_DATABASE=db"
-      - "MYSQL_USER=root"
-      - "MYSQL_PASSWORD=root"
+      - "MYSQL_DATABASE=docker_dev"
+      - "MYSQL_USER=docker_dev"
+      - "MYSQL_PASSWORD=testpass"
+      - "MYSQL_ROOT_PASSWORD=testpass"
+    volumes:
+      - dbdata:/var/lib/mysql:rw
+    networks:
+      - internal
+
+volumes:
+  php-fpm:
+    driver: "local"
+  nginx:
+    driver: "local"
+  mysql:
+    driver: "local"
+  dbdata:
+
+networks:
+  internal:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.201.224/27

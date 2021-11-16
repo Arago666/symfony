@@ -10,7 +10,7 @@ class MovieDto
     /**
      * @psalm-param array{name:string, durationInMinutes:int} $data
      */
-    public function load(array $data): void
+    public function __construct(array $data)
     {
         $this->name = $data['name'];
         $this->durationInMinutes = $data['durationInMinutes'];

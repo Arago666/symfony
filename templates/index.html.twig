@@ -3,7 +3,9 @@
 </h1>
 
 {% for movieSession_item in movieSession %}
-    <form method="get">
+    <form method="get" action="{{ path('booking_create')}}">
+        <textarea name="movieSessionId" style="display: none;">{{  movieSession_item.id }}</textarea>
+
         Фильм: {{  movieSession_item.movie.name }} <br>
 
         Дата начала фильма: {{ movieSession_item.startTime|date("F j, g:i a") }} <br>
@@ -15,16 +17,9 @@
         Ваше имя: <textarea name="name"></textarea><br>
 
         Ваш телефон: <textarea name="phone"></textarea><br>
-        <input type="submit" value="Сформировать" />
-        <a href="{{ path('booking_create',
-            {
-                'movieSessionId': movieSession_item.id,
-                "name": app.request.query.get("name"),
-                "phone": app.request.query.get("phone")
-            }) }}">
-            Купить билет
-        </a>
+        <input type="submit" value="Купить билет" id="submit" />
     </form>
     <br>
+    <a href="submit" id="submit" class="submit"></a>
     <br>
 {% endfor %}

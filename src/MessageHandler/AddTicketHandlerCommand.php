@@ -3,30 +3,30 @@
 namespace App\MessageHandler;
 
 use App\Entity\Ticket;
-use App\Repository\Aggregate\MovieSessionRepository;
+use App\Message\AddTicketCommand;
+use App\Repository\TicketRepository;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 
 class AddTicketHandlerCommand implements MessageHandlerInterface
 {
-    private MovieSessionRepository $movieSessionRepository;
-    private ManagerRegistry $doctrine;
+    private TicketRepository $ticketRepository;
 
-    public function __construct(MovieSessionRepository $movieSessionRepository, ManagerRegistry $doctrine)
+    public function __construct(TicketRepository $ticketRepository)
     {
-        $this->movieSessionRepository = $movieSessionRepository;
-        $this->doctrine = $doctrine;
+        $this->ticketRepository = $ticketRepository;
     }
 
-    public function __invoke(Ticket $movieTicket): void
+    public function __invoke(AddTicketCommand $command): void
     {
-        $this->doctrine->getManager()->persist($movieTicket);
-        $this->doctrine->getManager()->flush();
+        $ticket = new Ticket(
+            $command->getId(),
+            $command->getFirstName(),
+            $command->getPhone(),
+            $command->getMovieSession()
+        );
 
-        $movieSession = $this->movieSessionRepository->find($movieTicket->getMovieSession());
-        $movieSession->addTickets();
+        $command->getMovieSession()->addTicket($ticket);
 
-        $this->doctrine->getManager()->persist($movieSession);
-        $this->doctrine->getManager()->flush();
+        $this->ticketRepository->save($ticket);
     }
 }

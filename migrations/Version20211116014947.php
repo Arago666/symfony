@@ -7,18 +7,18 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-final class Version20211108024204 extends AbstractMigration
+final class Version20211116014947 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Создание таблиц movie, movie_session, ticket';
     }
 
     public function up(Schema $schema): void
     {
         $this->addSql('
             CREATE TABLE movie (
-                id VARCHAR(100) NOT NULL, 
+                id BINARY(16) NOT NULL COMMENT \'(DC2Type:uuid)\', 
                 name VARCHAR(255) NOT NULL, 
                 duration_in_minutes INT NOT NULL, 
                 PRIMARY KEY(id)
@@ -26,22 +26,19 @@ final class Version20211108024204 extends AbstractMigration
         ');
         $this->addSql('
             CREATE TABLE movie_session (
-                id VARCHAR(100) NOT NULL, 
-                movie_id VARCHAR(100) NOT NULL, 
+                id BINARY(16) NOT NULL COMMENT \'(DC2Type:uuid)\', 
+                movie_id BINARY(16) NOT NULL COMMENT \'(DC2Type:uuid)\', 
                 start_time DATETIME NOT NULL, 
                 quantity_tickets INT NOT NULL, 
-                INDEX IDX_F0D297FA8F93B6FC (movie_id), 
-                PRIMARY KEY(id)
+                INDEX IDX_F0D297FA8F93B6FC (movie_id), PRIMARY KEY(id)
             ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
         ');
         $this->addSql('
             CREATE TABLE ticket (
-                id VARCHAR(100) NOT NULL, 
-                movie_session_id VARCHAR(100) DEFAULT NULL, 
+                id BINARY(16) NOT NULL COMMENT \'(DC2Type:uuid)\', 
+                movie_session_id BINARY(16) DEFAULT NULL COMMENT \'(DC2Type:uuid)\', 
                 first_name VARCHAR(100) NOT NULL, 
-                phone VARCHAR(30) NOT NULL, 
-                INDEX IDX_97A0ADA388CF9CE3 (movie_session_id), 
-                PRIMARY KEY(id)
+                phone VARCHAR(30) NOT NULL, INDEX IDX_97A0ADA388CF9CE3 (movie_session_id), PRIMARY KEY(id)
             ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
         ');
         $this->addSql('ALTER TABLE movie_session ADD CONSTRAINT FK_F0D297FA8F93B6FC FOREIGN KEY (movie_id) REFERENCES movie (id)');

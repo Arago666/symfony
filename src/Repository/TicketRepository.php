@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Ticket;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -15,15 +14,16 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class TicketRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        parent::__construct($registry, Ticket::class);
+        $this->entityManager = $entityManager;
     }
 
     public function save(Ticket $ticket): void
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($ticket);
-        $entityManager->flush();
+        $this->entityManager->persist($ticket);
+        $this->entityManager->flush();
     }
 }

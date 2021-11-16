@@ -3,10 +3,14 @@
 namespace App\Entity\Aggregate;
 
 use App\Entity\Movie;
+use App\Entity\Ticket;
 use App\Repository\Aggregate\MovieSessionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use DateTimeInterface;
-use InvalidArgumentException;
+use Exception;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass=MovieSessionRepository::class)
@@ -15,9 +19,9 @@ class MovieSession
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type = "string", length = 100)
+     * @ORM\Column(type = "uuid")
      */
-    private string $id;
+    private Uuid $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=Movie::class)
@@ -35,15 +39,22 @@ class MovieSession
      */
     private int $quantityTickets;
 
-    public function __construct(string $id, Movie $movie, DateTimeInterface $startTime, int $quantityTickets)
+    /**
+     * @ORM\OneToMany(targetEntity=Ticket::class, cascade={"persist"}, mappedBy="movieSession")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private Collection $tickets;
+
+    public function __construct(Uuid $id, Movie $movie, DateTimeInterface $startTime, int $quantityTickets)
     {
         $this->id = $id;
         $this->movie = $movie;
         $this->startTime = $startTime;
         $this->quantityTickets = $quantityTickets;
+        $this->tickets = new ArrayCollection([]);
     }
 
-    public function getId(): ?int
+    public function getId(): Uuid
     {
         return $this->id;
     }
@@ -63,31 +74,24 @@ class MovieSession
         return $this->quantityTickets;
     }
 
-    /**
-     * @throws \InvalidArgumentException
-     */
-    public function addTickets(): void
+    public function addTicket(Ticket $ticket): void
     {
         if (!$this->isFreeTicket()) {
-            throw new InvalidArgumentException("Отсутсвуют свободные билеты");
+            throw new Exception("Отсутсвуют свободные билеты");
         }
 
         $this->reduceFreeTicket();
+        $this->tickets->add($ticket);
     }
 
     public function isFreeTicket(): bool
     {
-        return $this->getQuantityFreeTickets() > 0;
+        return $this->getQuantityTickets() > 0;
     }
 
     public function reduceFreeTicket(): bool
     {
         return $this->quantityTickets = $this->quantityTickets - 1;
-    }
-
-    public function getQuantityFreeTickets(): ?int
-    {
-        return $this->quantityTickets;
     }
 
     public function getEndTime(): DateTimeInterface

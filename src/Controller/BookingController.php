@@ -2,14 +2,13 @@
 
 namespace App\Controller;
 
+use App\Message\AddTicketCommand;
 use App\Repository\Aggregate\MovieSessionRepository;
 use App\Service\MovieSessionService;
-use App\Entity\Ticket;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Ramsey\Uuid\Uuid;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\HttpFoundation\Response;
-
 use Symfony\Component\Messenger\MessageBusInterface;
 
 class BookingController extends AbstractController
@@ -29,16 +28,16 @@ class BookingController extends AbstractController
     {
         $movieSession = $this->movieSessionRepository->find($request->query->get("movieSessionId"));
 
-        $ticket = new Ticket(
-            Uuid::uuid4(),
-            $request->query->get("name"),
-            $request->query->get("phone"),
+        $command = new AddTicketCommand(
+            Uuid::v4(),
+            (string)$request->query->get("name"),
+            (string)$request->query->get("phone"),
             $movieSession
         );
 
-        $this->bus->dispatch($ticket);
+        $this->bus->dispatch($command);
 
-        return $this->index();
+        return $this->redirectToRoute('booking');
     }
 
     public function index(): Response

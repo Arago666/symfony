@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Aggregate\MovieSession;
 use App\Repository\TicketRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass=TicketRepository::class)
@@ -13,9 +14,9 @@ class Ticket
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="uuid")
      */
-    private string $id;
+    private Uuid $id;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -28,12 +29,12 @@ class Ticket
     private string $phone;
 
     /**
-     * @ORM\ManyToOne(targetEntity=MovieSession::class)
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\ManyToOne(targetEntity=MovieSession::class, inversedBy="tickets", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true, name="movie_session_id", referencedColumnName="id")
      */
     private MovieSession $movieSession;
 
-    public function __construct(string $id, string $firstName, string $phone, MovieSession $movieSession)
+    public function __construct(Uuid $id, string $firstName, string $phone, MovieSession $movieSession)
     {
         $this->id = $id;
         $this->firstName = $firstName;

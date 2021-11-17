@@ -31,6 +31,14 @@ class BookingController extends AbstractController
 
         $movieSession = $this->movieSessionRepository->find($request->query->get("movieSessionId"));
 
+        if (!$movieSession) {
+            throw new Exception("Несуществующий сеанс");
+        }
+
+        if ($movieSession->getQuantityTickets() <= 0) {
+            throw new Exception("Отсутсвуют свободные билеты");
+        }
+
         $command = new AddTicketCommand(
             Uuid::v4(),
             (string) $request->query->get("name"),

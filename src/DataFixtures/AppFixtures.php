@@ -14,35 +14,40 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $movieFirst = $this->loadMovie('The Dark Knight', 152);
-        $manager->persist($movieFirst);
+        $movieSessionArray = [
+            [
+                'movie'             =>  'The Dark Knight',
+                'durationInMinutes' => 152,
+                'startDate'         => '2021-11-25T16:55:00',
+                'quantityTicket'    => 300
 
-        $movieSecond = $this->loadMovie('Iron Man', 121);
-        $manager->persist($movieSecond);
+            ],
+            [
+                'movie'             =>  'Iron Man',
+                'durationInMinutes' => 121,
+                'startDate'         => '2021-11-25T10:00:00',
+                'quantityTicket'    => 200
+            ],
 
-        $movieSessionFirst = new MovieSession(
-            Uuid::v4(),
-            $movieFirst,
-            new DateTime('2021-11-25T16:55:00'),
-            100
-        );
-        $manager->persist($movieSessionFirst);
+        ];
 
-        $movieSessionSecond = new MovieSession(
-            Uuid::v4(),
-            $movieFirst,
-            new DateTime('2021-12-01T10:30:00'),
-            300
-        );
-        $manager->persist($movieSessionSecond);
+        foreach ($movieSessionArray as $movieItem) {
+            $movie = $this->loadMovie(
+                $movieItem['movie'],
+                $movieItem['durationInMinutes']
+            );
 
-        $movieSessionThird = new MovieSession(
-            Uuid::v4(),
-            $movieSecond,
-            new DateTime('2021-12-01T20:15:00'),
-            200
-        );
-        $manager->persist($movieSessionThird);
+            $manager->persist($movie);
+
+            $movieSession = new MovieSession(
+                Uuid::v4(),
+                $movie,
+                new DateTime($movieItem['startDate']),
+                $movieItem['quantityTicket']
+            );
+
+            $manager->persist($movieSession);
+        }
 
         $manager->flush();
     }

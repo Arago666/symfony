@@ -7,7 +7,7 @@ use App\Message\AddTicketCommand;
 use App\Repository\TicketRepository;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-class AddTicketHandlerCommand implements MessageHandlerInterface
+class AddTicketHandler implements MessageHandlerInterface
 {
     private TicketRepository $ticketRepository;
 

@@ -14,5 +14,5 @@
 - в файле .env устанавливаем APP_ENV=test
 - sudo docker exec -tiu0 symfony_php-fpm_1 php bin/console doctrine:database:create
 - sudo docker exec -tiu0 symfony_php-fpm_1 php bin/console doctrine:migrations:migrate -n
-- sudo docker exec -tiu0 symfony_php-fpm_1 php bin/console doctrine:fixtures:load -nx
+- sudo docker exec -tiu0 symfony_php-fpm_1 php bin/console doctrine:fixtures:load -n
 - sudo docker exec -tiu0 symfony_php-fpm_1 php bin/phpunit

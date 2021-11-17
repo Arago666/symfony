@@ -9,7 +9,7 @@ use Symfony\Component\Uid\Uuid;
 
 class MovieTest extends TestCase
 {
-    public function testSomething(): void
+    public function testCreate(): void
     {
         $id = Uuid::v4();
         $name = 'test';
@@ -25,10 +25,8 @@ class MovieTest extends TestCase
             $movieDTO
         );
 
-        $this->assertSame($id, $movie->getId());
-        $this->assertSame($name, $movie->getName());
-        $this->assertSame($durationInMinutes, $movie->getDurationInMinutes());
-
-        $this->assertTrue(true);
+        $this->assertEquals($id, $movie->getId());
+        $this->assertEquals($name, $movie->getName());
+        $this->assertEquals($durationInMinutes, $movie->getDurationInMinutes());
     }
 }

@@ -3,15 +3,14 @@
 namespace App\Message;
 
 use App\Entity\Aggregate\MovieSession;
-use App\Entity\Ticket;
 use Symfony\Component\Uid\Uuid;
 
-class AddTicketCommand extends Ticket
+class AddTicketCommand
 {
-    public Uuid $id;
-    public string $firstName;
-    public string $phone;
-    public MovieSession $movieSession;
+    private Uuid $id;
+    private string $firstName;
+    private string $phone;
+    private MovieSession $movieSession;
 
     public function __construct(Uuid $id, string $firstName, string $phone, MovieSession $movieSession)
     {

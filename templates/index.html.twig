@@ -3,6 +3,7 @@
 </h1>
 
 {% for movieSession_item in movieSession %}
+    {% if(movieSession_item.quantityTickets > 0) %}
     <form method="get" action="{{ path('booking_create')}}">
         <textarea name="movieSessionId" style="display: none;">{{  movieSession_item.id }}</textarea>
 
@@ -22,4 +23,5 @@
     <br>
     <a href="submit" id="submit" class="submit"></a>
     <br>
+    {% endif %}
 {% endfor %}

@@ -93,11 +93,4 @@ class MovieSession
     {
         return $this->quantityTickets = $this->quantityTickets - 1;
     }
-
-    public function getEndTime(): DateTimeInterface
-    {
-        $durationInMinutes = new DateInterval('PT' . $this->movie->getDurationInMinutes() . 'M');
-
-        return $this->startTime->add($durationInMinutes);
-    }
 }

@@ -12,7 +12,7 @@ use DateTime;
 
 class TicketTest extends TestCase
 {
-    public function testSomething(): void
+    public function testCreate(): void
     {
         $movieDTO = new MovieDto([
             'name' => 'TestMovie',
@@ -38,7 +38,6 @@ class TicketTest extends TestCase
             $movieSession
         );
 
-        $this->assertSame($movieSession, $ticket->getMovieSession());
-        $this->assertTrue(true);
+        $this->assertEquals($movieSession, $ticket->getMovieSession());
     }
 }
